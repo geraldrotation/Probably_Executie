@@ -56,6 +56,15 @@ cutie.queueTime = 0
 -----------------------------------------------------------------------------------------------------------------------------
 -- Macros ------------------------------------------------------------------------------------------------------------------- 
 -----------------------------------------------------------------------------------------------------------------------------
+if macros == nil then
+  -- Macros
+  macros = { 
+      ["SingleTarget"]      = 1, 
+      ["UseCds"]      = 1, 
+      ["AoE"]         = 1,
+  } 
+end
+
 ProbablyEngine.command.register('cutie', function(msg, box)
   local command, text = msg:match("^(%S*)%s*(.-)$")
 -- Toggle -------------------------------------------------------------------------------------------------------------------
@@ -110,11 +119,11 @@ ProbablyEngine.command.register('cutie', function(msg, box)
     if ProbablyEngine.toggle.states.autobanner then
       --ProbablyEngine.buttons.toggle('autobanner')
       ProbablyEngine.buttons.buttons['autobanner']:Click()
-      ecn:message("|cFFB30000SoO Auto Skull Banner off")
+      ecn:message("|cFFB30000Auto Skull Banner off")
     else
       --ProbablyEngine.buttons.toggle('autobanner')
       ProbablyEngine.buttons.buttons['autobanner']:Click()
-      ecn:message("|cFF00B34ASoO Auto Skull Banner on")
+      ecn:message("|cFF00B34AAuto Skull Banner on")
     end
   end
 
@@ -130,52 +139,38 @@ ProbablyEngine.command.register('cutie', function(msg, box)
     end
   end
 
-    if command == 'twotar' then
-    if ProbablyEngine.toggle.states.twotargets then
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['twotargets']:Click()
-      ecn:message("|cFFB300002 Target Rotation off")
-    else
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['twotargets']:Click()
-      ecn:message("|cFF00B34A2 Target Rotation on")
-    end
-  end
-
-    if command == 'threetar' then
-    if ProbablyEngine.toggle.states.threetargets then
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['threetargets']:Click()
-      ecn:message("|cFFB300003 Target Rotation off")
-    else
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['threetargets']:Click()
-      ecn:message("|cFF00B34A3 Target Rotation on")
-    end
-  end
-
-    if command == 'fourtar' then
-    if ProbablyEngine.toggle.states.fourplustargets then
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['fourplustargets']:Click()
-      ecn:message("|cFFB300004+ Targets Rotation off")
-    else
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['fourplustargets']:Click()
-      ecn:message("|cFF00B34A4+ Targets Rotation on")
-    end
-  end
-
-  if command == 'armsmacros' then
-    cutie.createArmsMacros()
-  end
-
-  if command == 'furymacros' then
-    cutie.createFuryMacros()
+  if command == 'macros' then
+    cutie.createAllMacros()
   end
 
   if command == 'help' then
     cutie.macroHelp()
+  end
+
+  if command == "tarplus" then
+    if macros["SingleTarget"] == 1 then
+      macros["SingleTarget"] = 2
+      ecn:message("Two Targets")
+    elseif macros["SingleTarget"] == 2 then
+      macros["SingleTarget"] = 3
+      ecn:message("Three Targets")
+    else 
+      macros["SingleTarget"] = 1
+      ecn:message("Single Target")
+    end
+  end
+
+  if command == "tarminus" then
+    if macros["SingleTarget"] == 3 then
+      macros["SingleTarget"] = 2
+      ecn:message("Two Targets") 
+    elseif macros["SingleTarget"] == 2 then
+      macros["SingleTarget"] = 1
+      ecn:message("Single Target")
+    else 
+      macros["SingleTarget"] = 3
+      ecn:message("Three Targets")
+    end
   end
 
 -- Spell Queue -- thank you merq for basic code -----------------------------------------------------------------------------
@@ -222,6 +217,32 @@ ProbablyEngine.command.register('cutie', function(msg, box)
   if cutie.queueSpell ~= nil then cutie.queueTime = GetTime() end
 end)
 -----------------------------------------------------------------------------------------------------------------------------
+-- NumTargets ----------------------------------------------------------------------- 
+-----------------------------------------------------------------------------------------------------------------------------
+singletargetrota = nil
+function cutie.singletargetrota()
+  if macros["SingleTarget"] == 1 then
+    return true
+  else return false
+  end
+end
+
+twotargetrota = nil
+function cutie.twotargetrota()
+  if macros["SingleTarget"] == 2 then
+    return true
+  else return false
+  end
+end
+
+threetargetrota = nil
+function cutie.threetargetrota()
+  if macros["SingleTarget"] == 3 then
+    return true
+  else return false
+  end
+end
+-----------------------------------------------------------------------------------------------------------------------------
 -- Spell Queue Check -- thank you merq for basic code ----------------------------------------------------------------------- 
 -----------------------------------------------------------------------------------------------------------------------------
 cutie.checkQueue = function (spellId)
@@ -243,32 +264,9 @@ cutie.checkQueue = function (spellId)
     return false
 end
 -----------------------------------------------------------------------------------------------------------------------------
--- Create Arms Macros ----------------------------------------------------------------------- 
+-- Create All Macros -------------------------------------------------------------------------------------------------------- 
 -----------------------------------------------------------------------------------------------------------------------------
-function cutie.createArmsMacros( ... )
-  local usedslots = select(2,GetNumMacros())
-  if usedslots <= 5 then
-    CreateMacro("toggle", "Inv_sword_01", "/cutie toggle", 1, 1)
-    CreateMacro("kick", "inv_gauntlets_04", "#showtooltip Pummel\n/cutie kick", 1, 1)
-    CreateMacro("cds", "ability_criticalstrike", "/cutie cds", 1, 1)
-    CreateMacro("aoe", "Ability_warlock_jinx", "/cutie aoe", 1, 1)
-    CreateMacro("autobanner", "inv_banner_03", "/cutie autobanner", 1, 1)
-    CreateMacro("def", "Inv_shield_08", "/cutie def", 1, 1)
-    CreateMacro("qSkullb", "warrior_skullbanner", "#showtooltip Skull Banner\n/cutie qSkullb", 1, 1)
-    CreateMacro("qShieldWall", "ability_warrior_shieldwall", "#showtooltip Shield Wall\n/cutie qShieldWall", 1, 1)
-    CreateMacro("qDiebtSw", "ability_warrior_challange", "#showtooltip Die by the Sword\n/cutie qDiebtSw", 1, 1)
-    CreateMacro("qDemob", "demoralizing_banner", "#showtooltip Demoralizing Banner\n/cutie qDemob", 1, 1)
-    CreateMacro("qRally", "ability_toughness", "#showtooltip Rallying Cry\n/cutie qRally", 1, 1)
-    CreateMacro("qTfour", "ability_parry", "/cutie qTfour", 1, 1)
-    CreateMacro("qTfive", "ability_parry", "/cutie qTfive", 1, 1)
-  else
-    print("You don't have enough free Macroslots")
-  end
-end  
------------------------------------------------------------------------------------------------------------------------------
--- Create Fury Macros ----------------------------------------------------------------------- 
------------------------------------------------------------------------------------------------------------------------------
-function cutie.createFuryMacros( ... )
+function cutie.createAllMacros( ... )
   local usedslots = select(2,GetNumMacros())
   if usedslots <= 3 then
     CreateMacro("toggle", "Inv_sword_01", "/cutie toggle", 1, 1)
@@ -283,9 +281,9 @@ function cutie.createFuryMacros( ... )
     CreateMacro("qRally", "ability_toughness", "#showtooltip Rallying Cry\n/cutie qRally", 1, 1)
     CreateMacro("qTfour", "ability_parry", "/cutie qTfour", 1, 1)
     CreateMacro("qTfive", "ability_parry", "/cutie qTfive", 1, 1)
-    CreateMacro("twotar", "ability_warrior_cleave", "/cutie twotar", 1, 1)
-    CreateMacro("threetar", "ability_whirlwind", "/cutie threetar", 1, 1)
-    CreateMacro("fourtar", "ability_warrior_bladestorm", "/cutie fourtar", 1, 1)
+    CreateMacro("plus", "spell_chargepositive", "/cutie tarplus", 1, 1)
+    CreateMacro("minus", "spell_chargenegative", "/cutie tarminus", 1, 1)
+    CreateMacro("aoe", "Ability_warlock_jinx", "/cutie aoe", 1, 1)
 
   else
     print("You don't have enough free Macroslots")
@@ -295,9 +293,9 @@ end
 -- Create Help Message ------------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
 function cutie.macroHelp( ... )
-  print("|cFFC79C6EExecutie |rv1.0")
-  print("|cFFC79C6ECommands:|r\n/cutie armsmacros - Create all Toggle / Spellqueue Macros for Arms Rotation\n/cutie furymacros - Create all Toggle / Spellqueue Macros for Fury Rotation")
-  print("|cFFC79C6EToggle Macros:|r\n/cutie toggle - Rotation on/off\n/cutie kick - Interrupt & Disarm on/off\n/cutie cds - Offensive Cooldowns on/off\n/cutie aoe - Multitarget-Rotation on/off\n/cutie autobanner - Auto Skull Banner on/off\n/cutie def - Auto Defensive Cooldowns on/off\n/cutie twotar - 2 Target Rotation on/off (Fury only)\n/cutie threetar - 3 Target Rotation on/off (Fury only)\n/cutie fourtar - 4+ Target Rotation on/off (Fury only)")
+  print("|cFFC79C6EExecutie |rv1.1")
+  print("|cFFC79C6ECommands:|r\n/cutie macros - Create all Toggle / Spellqueue Macros")
+  print("|cFFC79C6EToggle Macros:|r\n/cutie toggle - Rotation on/off\n/cutie kick - Interrupt & Disarm on/off\n/cutie cds - Offensive Cooldowns on/off\n/cutie aoe - Multitarget-Rotation on/off (4+ for Fury)\n/cutie autobanner - Auto Skull Banner on/off\n/cutie def - Auto Defensive Cooldowns on/off\n/cutie tarplus - Increase Targets(Fury only)\n/cutie tarminus - Decrease Targets (Fury only)")
   print("|cFFC79C6EQueue Macros:|r\n/cutie qSkullb | qShieldWall | qDiebtSw | qDemob | qTfour | qTfive | qRally")
   print("|cFFC79C6EAdditional Help:|r\nhttp://tinyurl.com/pe-executie")
 end  
@@ -311,7 +309,115 @@ function cutie.Healthstone(...)
     and ( select(2, GetItemCooldown(5512)) == 0 ) then
         return true
     end
-end 
+end
+-----------------------------------------------------------------------------------------------------------------------------
+-- CD Reduction Evil Eye Trinket -------------------------------------------------------------------------------------------- 
+----------------------------------------------------------------------------------------------------------------------------- 
+function cutie.EvilEye()
+  if CD_Trinket == nil then
+  
+    if (GetInventoryItemID("player", 13) == 105491
+      or GetInventoryItemID("player", 14) == 105491) then -- heroic warforged 47%
+        CD_Trinket_V = (1 / 1.47)
+        CD_Trinket = true
+        
+    elseif (GetInventoryItemID("player", 13) == 104495 -- heroic 44%
+      or GetInventoryItemID("player", 14) == 104495) then
+        CD_Trinket_V = (1 / 1.44)
+        CD_Trinket = true
+      
+    elseif (GetInventoryItemID("player", 13) == 105242 -- warforged 41%
+      or GetInventoryItemID("player", 14) == 105242) then
+        CD_Trinket_V = (1 / 1.41)
+        CD_Trinket = true
+    
+    elseif (GetInventoryItemID("player", 13) == 102298  -- normal 39%
+      or GetInventoryItemID("player", 14) == 102298) then
+        CD_Trinket_V = (1 / 1.39)
+        CD_Trinket = true
+    
+    elseif (GetInventoryItemID("player", 13) == 104744 -- flex 34%
+      or GetInventoryItemID("player", 14) == 104744) then
+        CD_Trinket_V = (1 / 1.34)
+        CD_Trinket = true
+    
+    elseif (GetInventoryItemID("player", 13) == 104993  -- lfr 31%
+      or GetInventoryItemID("player", 14) == 104744) then
+        CD_Trinket_V = (1 / 1.31)
+        CD_Trinket = true
+    end
+  
+    if CD_Trinket ~= true then
+      CD_Trinket = false
+      CD_Trinket_V = 1
+    end
+  end
+end
+-----------------------------------------------------------------------------------------------------------------------------
+-- Time to Die - (c) Mavmins ------------------------------------------------------------------------------------------------ 
+-----------------------------------------------------------------------------------------------------------------------------
+function cutie.TimeToDie()
+  if UnitExists("Target") then
+    if (guid ~= UnitGUID("target")) or (guid == UnitGUID("target") and UnitHealth("target") == _firstLifeMax) then
+        guid = UnitGUID("target")
+        _firstLife = UnitHealth("target")
+        _firstLifeMax = UnitHealthMax("target")
+        _firstTime = GetTime()
+    end             
+        
+    _currentLife = UnitHealth("target")
+    _currentTime = GetTime()
+    timeDiff = _currentTime - _firstTime
+    hpDiff = _firstLife - _currentLife
+      
+    if hpDiff > 0 then
+        fullTime = timeDiff*_firstLifeMax/hpDiff
+        pastFirstTime = (_firstLifeMax - _firstLife)*timeDiff/hpDiff
+        calcTime = _firstTime - pastFirstTime + fullTime - _currentTime
+        if calcTime < 1 then
+            calcTime = 1
+        end
+        ttd = calcTime
+    end
+              
+    if hpDiff <= 0 then
+        guid = UnitGUID("target")
+        _firstLife = UnitHealth("target")
+        _firstLifeMax = UnitHealth("target")
+        _firstTime = GetTime()
+    end
+              
+    -- Dummy
+    if UnitHealthMax("target") == 1 then
+        ttd = 99
+    end
+      
+    -- If a new add is below a certain HP you dont want to cast Dots on it: Need to change to reflect your raids DPS            
+    if UnitHealthMax("target") <= 1500000 then
+        ttd = 1
+    end
+              
+    if not ttd then
+        ttd = 1
+    end
+  end
+end
+-----------------------------------------------------------------------------------------------------------------------------
+-- Simcraft Functions ------------------------------------------------------------------------------------------------------- 
+-----------------------------------------------------------------------------------------------------------------------------
+
+--bladestorm,if=enabled&buff.enrage.up&(buff.bloodbath.up|!talent.bloodbath.enabled)
+function cutie.Bladestorm()
+  ER = UnitBuff("player", GetSpellInfo(12880)) -- Enraged
+  BB = UnitBuff("player", GetSpellInfo(12292)) -- Bloodbath
+
+  if (IsPlayerSpell(46924) and IsSpellInRange(GetSpellInfo(78), "target") == 1) then
+    if ER ~= nil
+      and (BB ~= nil or IsPlayerSpell(12292) == false) then
+        return true
+    end
+  end
+end
 -----------------------------------------------------------------------------------------------------------------------------
 -- Register Library --------------------------------------------------------------------------------------------------------- 
 -----------------------------------------------------------------------------------------------------------------------------
