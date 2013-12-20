@@ -240,19 +240,4 @@ ProbablyEngine.toggle.create(
     'Interface\\Icons\\warrior_skullbanner.png‎',
     'Auto Skull Banner',
 	'Enable or Disable Auto Skull Banner\nUse /arma qSkullb if disabled')
-ProbablyEngine.toggle.create(
-    'twotargets',
-    'Interface\\Icons\\ability_warrior_cleave.png‎',
-    '2 Target Rotation',
-	'Enable or Disable 2 Target Rotation')
-ProbablyEngine.toggle.create(
-    'threetargets',
-    'Interface\\Icons\\ability_whirlwind.png‎',
-    '3 Target Rotation',
-	'Enable or Disable 3 Target Rotation')
-ProbablyEngine.toggle.create(
-    'fourplustargets',
-    'Interface\\Icons\\ability_warrior_bladestorm.png‎',
-    '4+ Target Rotation',
-	'Enable or Disable 4+ Target Rotation')
 end)
