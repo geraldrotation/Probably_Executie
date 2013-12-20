@@ -1,0 +1,10 @@
+## Interface: 50400
+## Title: Probably - |CFFC79C6EExecutie DPS Warrior
+## Notes: ProbablyEngine Custom Arms Warrior
+## Dependencies: Probably
+## Author: chumii
+## Version: 1.0
+
+functions.lua
+arms.lua
+fury.lua
