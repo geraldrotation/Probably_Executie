@@ -76,7 +76,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 	{{
 		{"78", {"target.debuff(86346)", "player.rage >= 40"}},
 	}, "target.health <= 20" },
-	{"78", {"player.rage >= 90", "player.buff(12880)"}},
+	{"78", {"player.rage >= 100", "player.buff(12880)"}},
 --actions.single_target+=/storm_bolt,if=enabled&buff.cooldown_reduction.up&debuff.colossus_smash.up
 	{"107570", "target.debuff(86346)"},
 --actions.single_target+=/raging_blow,if=buff.raging_blow.stack=2&debuff.colossus_smash.up&target.health.pct>=20
@@ -92,7 +92,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 	{"86346"},
 --actions.single_target+=/execute,if=debuff.colossus_smash.up|rage>70|target.time_to_die<12
 	{"5308", "target.debuff(86346)"},
-	{"5308", "player.rage > 60"},
+	{"5308", "player.rage > 70"},
 --actions.single_target+=/raging_blow,if=target.health.pct<20|buff.raging_blow.stack=2|(debuff.colossus_smash.up|(cooldown.bloodthirst.remains>=1&buff.raging_blow.remains<=3))
 	{"85288", "target.health < 20"},
 	{"85288", "player.buff(131116).count = 2"},
@@ -105,13 +105,13 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.single_target+=/raging_blow,if=cooldown.colossus_smash.remains>=3
 	{"85288", "player.spell(86346).cooldown >= 3"},
 --actions.single_target+=/heroic_throw,if=debuff.colossus_smash.down&rage<60
-	{ "57755", {"!target.debuff(86346)", "player.rage < 50"} },
+	{ "57755", {"!target.debuff(86346)", "player.rage < 60"} },
 --actions.single_target+=/battle_shout,if=rage<70&!debuff.colossus_smash.up
-	{ "6673", "player.rage < 50" },
+	{ "6673", "player.rage < 70" },
 --actions.single_target+=/wild_strike,if=debuff.colossus_smash.up&target.health.pct>=20
 	{ "100130", {"target.debuff(86346)", "target.health >= 20"} },
 --actions.single_target+=/wild_strike,if=cooldown.colossus_smash.remains>=2&rage>=70&target.health.pct>=20
-	{ "100130", {"player.spell(86346).cooldown >= 2", "target.health >= 20", "player.rage >= 60"} },
+	{ "100130", {"player.spell(86346).cooldown >= 2", "target.health >= 20", "player.rage >= 70"} },
 --actions.single_target+=/impending_victory,if=enabled&target.health.pct>=20&cooldown.colossus_smash.remains>=2
 	{ "103840",{"target.health >= 20", "player.spell(86346).cooldown >= 2"}},
 }, {"!modifier.multitarget", "@cutie.singletargetrota()"}},
@@ -122,7 +122,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.two_targets=bloodbath,if=enabled&buff.enrage.up
 		{"12292", "player.buff(12880)"},
 --actions.two_targets+=/cleave,if=(rage>=60&debuff.colossus_smash.up)|rage>90
-		{"845", {"player.rage >= 50", "target.debuff(86346)"}},
+		{"845", {"player.rage >= 60", "target.debuff(86346)"}},
 		{"845", "player.rage > 90"},
 --actions.two_targets+=/dragon_roar,if=enabled&(!debuff.colossus_smash.up&(buff.bloodbath.up|!talent.bloodbath.enabled))
 		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists"} },
@@ -147,7 +147,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.two_targets+=/whirlwind,if=!buff.meat_cleaver.up
 		{"1680", "!player.buff(85739)"},
 --actions.two_targets+=/battle_shout,if=rage<70
-		{ "6673", "player.rage < 50" },
+		{ "6673", "player.rage < 70" },
 --actions.two_targets+=/heroic_throw
 		{ "57755"},
 	}, {"!modifier.multitarget", "@cutie.twotargetrota()"}},
@@ -158,7 +158,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.three_targets=bloodbath,if=enabled&buff.enrage.up
 		{"12292", "player.buff(12880)"},
 --actions.three_targets+=/cleave,if=(rage>=60&debuff.colossus_smash.up)|rage>90
-		{"845", {"player.rage >= 50", "target.debuff(86346)"}},
+		{"845", {"player.rage >= 60", "target.debuff(86346)"}},
 		{"845", "player.rage > 90"},
 --actions.three_targets+=/dragon_roar,if=enabled&(!debuff.colossus_smash.up&(buff.bloodbath.up|!talent.bloodbath.enabled))
 		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists"} },
@@ -183,7 +183,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.three_targets+=/raging_blow
 		{"85288"},
 --actions.three_targets+=/battle_shout,if=rage<70
-		{ "6673", "player.rage < 50" },
+		{ "6673", "player.rage < 70" },
 --actions.three_targets+=/heroic_throw
 		{ "57755"},
 	}, {"!modifier.multitarget", "@cutie.threetargetrota()"}},
@@ -194,7 +194,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.aoe=bloodbath,if=enabled&buff.enrage.up
 		{"12292", "player.buff(12880)"},
 --actions.aoe+=/cleave,if=rage>110
-		{"845", "player.rage > 100"},
+		{"845", "player.rage > 110"},
 --actions.aoe+=/dragon_roar,if=enabled&debuff.colossus_smash.down&(buff.bloodbath.up|!talent.bloodbath.enabled)
 		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists"} },
 		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)"} },
@@ -218,7 +218,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.aoe+=/colossus_smash
 		{"86346"},
 --actions.aoe+=/battle_shout,if=rage<70
-		{ "6673", "player.rage < 50" },
+		{ "6673", "player.rage < 70" },
 	}, "modifier.multitarget"},
 -----------------------------------------------------------------------------------------------------------------------------
 -- OOC Hotkeys -------------------------------------------------------------------------------------------------------------- 
