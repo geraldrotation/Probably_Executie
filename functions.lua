@@ -69,72 +69,72 @@ ProbablyEngine.command.register('cutie', function(msg, box)
   local command, text = msg:match("^(%S*)%s*(.-)$")
 -- Toggle -------------------------------------------------------------------------------------------------------------------
   if command == 'toggle' then
-    if ProbablyEngine.toggle.states.MasterToggle then
-        --ProbablyEngine.buttons.toggle('MasterToggle')
-        ProbablyEngine.buttons.buttons['MasterToggle']:Click()
+    if ProbablyEngine.config.read('button_states', 'MasterToggle', false) then
+        ProbablyEngine.buttons.toggle('MasterToggle')
+        --ProbablyEngine.buttons.buttons['MasterToggle']:Click()
         ecn:message("|cFFB30000Executie off")
     else
-        --ProbablyEngine.buttons.toggle('MasterToggle')
-        ProbablyEngine.buttons.buttons['MasterToggle']:Click()
+        ProbablyEngine.buttons.toggle('MasterToggle')
+        --ProbablyEngine.buttons.buttons['MasterToggle']:Click()
         ecn:message("|cFF00B34AExecutie on")
     end
   end
   if command == 'kick' then
-    if ProbablyEngine.toggle.states.interrupt then
-      --ProbablyEngine.buttons.toggle('interrupt')
-      ProbablyEngine.buttons.buttons['interrupt']:Click()
+    if ProbablyEngine.config.read('button_states', 'interrupt', false) then
+      ProbablyEngine.buttons.toggle('interrupt')
+      --ProbablyEngine.buttons.buttons['interrupt']:Click()
       ecn:message("|cFFB30000Interrupts off")
     else
-      --ProbablyEngine.buttons.toggle('interrupt')
-      ProbablyEngine.buttons.buttons['interrupt']:Click()
+      ProbablyEngine.buttons.toggle('interrupt')
+      --ProbablyEngine.buttons.buttons['interrupt']:Click()
       ecn:message("|cFF00B34AInterrupts on")
     end
   end
 
   if command == 'cds' then
-    if ProbablyEngine.toggle.states.cooldowns then
-      --ProbablyEngine.buttons.toggle('cooldowns')
-      ProbablyEngine.buttons.buttons['cooldowns']:Click()
+    if ProbablyEngine.config.read('button_states', 'cooldowns', false) then
+      ProbablyEngine.buttons.toggle('cooldowns')
+      --ProbablyEngine.buttons.buttons['cooldowns']:Click()
       ecn:message("|cFFB30000Offensive Cooldowns off")
     else
-      --ProbablyEngine.buttons.toggle('cooldowns')
-      ProbablyEngine.buttons.buttons['cooldowns']:Click()
+      ProbablyEngine.buttons.toggle('cooldowns')
+      --ProbablyEngine.buttons.buttons['cooldowns']:Click()
       ecn:message("|cFF00B34AOffensive Cooldowns on")
     end
   end
 
   if command == 'aoe' then
-    if ProbablyEngine.toggle.states.multitarget then
-      --ProbablyEngine.buttons.toggle('multitarget')
-      ProbablyEngine.buttons.buttons['multitarget']:Click()
+    if ProbablyEngine.config.read('button_states', 'multitarget', false) then
+      ProbablyEngine.buttons.toggle('multitarget')
+      --ProbablyEngine.buttons.buttons['multitarget']:Click()
       ecn:message("|cFFB30000AoE off")
     else
-      --ProbablyEngine.buttons.toggle('multitarget')
-      ProbablyEngine.buttons.buttons['multitarget']:Click()
+      ProbablyEngine.buttons.toggle('multitarget')
+      --ProbablyEngine.buttons.buttons['multitarget']:Click()
       ecn:message("|cFF00B34AAoE on")
     end
   end
   
   if command == 'autobanner' then
-    if ProbablyEngine.toggle.states.autobanner then
-      --ProbablyEngine.buttons.toggle('autobanner')
-      ProbablyEngine.buttons.buttons['autobanner']:Click()
+    if ProbablyEngine.config.read('button_states', 'autobanner', false) then
+      ProbablyEngine.buttons.toggle('autobanner')
+      --ProbablyEngine.buttons.buttons['autobanner']:Click()
       ecn:message("|cFFB30000Auto Skull Banner off")
     else
-      --ProbablyEngine.buttons.toggle('autobanner')
-      ProbablyEngine.buttons.buttons['autobanner']:Click()
+      ProbablyEngine.buttons.toggle('autobanner')
+      --ProbablyEngine.buttons.buttons['autobanner']:Click()
       ecn:message("|cFF00B34AAuto Skull Banner on")
     end
   end
 
   if command == 'def' then
-    if ProbablyEngine.toggle.states.def then
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['def']:Click()
+    if ProbablyEngine.config.read('button_states', 'def', false) then
+      ProbablyEngine.buttons.toggle('def')
+      --ProbablyEngine.buttons.buttons['def']:Click()
       ecn:message("|cFFB30000Defensive Cooldowns off")
     else
-      --ProbablyEngine.buttons.toggle('def')
-      ProbablyEngine.buttons.buttons['def']:Click()
+      ProbablyEngine.buttons.toggle('def')
+      --ProbablyEngine.buttons.buttons['def']:Click()
       ecn:message("|cFF00B34ADefensive Cooldowns on")
     end
   end
@@ -284,7 +284,6 @@ function cutie.createAllMacros( ... )
     CreateMacro("plus", "spell_chargepositive", "/cutie tarplus", 1, 1)
     CreateMacro("minus", "spell_chargenegative", "/cutie tarminus", 1, 1)
     CreateMacro("aoe", "Ability_warlock_jinx", "/cutie aoe", 1, 1)
-
   else
     print("You don't have enough free Macroslots")
   end
@@ -399,22 +398,6 @@ function cutie.TimeToDie()
               
     if not ttd then
         ttd = 1
-    end
-  end
-end
------------------------------------------------------------------------------------------------------------------------------
--- Simcraft Functions ------------------------------------------------------------------------------------------------------- 
------------------------------------------------------------------------------------------------------------------------------
-
---bladestorm,if=enabled&buff.enrage.up&(buff.bloodbath.up|!talent.bloodbath.enabled)
-function cutie.Bladestorm()
-  ER = UnitBuff("player", GetSpellInfo(12880)) -- Enraged
-  BB = UnitBuff("player", GetSpellInfo(12292)) -- Bloodbath
-
-  if (IsPlayerSpell(46924) and IsSpellInRange(GetSpellInfo(78), "target") == 1) then
-    if ER ~= nil
-      and (BB ~= nil or IsPlayerSpell(12292) == false) then
-        return true
     end
   end
 end
