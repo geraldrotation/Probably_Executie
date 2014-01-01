@@ -84,7 +84,7 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 --actions.single_target+=/storm_bolt,if=enabled&debuff.colossus_smash.up
 	{"107570", "target.debuff(86346)"},
 --actions.single_target+=/dragon_roar,if=enabled&debuff.colossus_smash.down
-	{"118000", "!target.debuff(86346)"},
+	{"118000", {"!target.debuff(86346)", "target.range <= 6"}},
 --actions.single_target+=/execute,if=buff.sudden_execute.down|buff.taste_for_blood.down|rage>90|target.time_to_die<12
 	{"5308", "!player.buff(139958)"},
 	{"5308", "!player.buff(56636)"},
@@ -113,8 +113,8 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 	{ "46924", { "player.buff(12880)", "!player.spell(46924).exists"} },
 	{ "46924", { "player.buff(12880)", "player.buff(12292)"} },
 --actions.aoe+=/dragon_roar,if=enabled&debuff.colossus_smash.down
-	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists"} },
-	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)"} },
+	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.range <= 6"} },
+	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.range <= 6"} },
 --actions.aoe+=/colossus_smash,if=debuff.colossus_smash.remains<1
 	{"86346", "target.debuff(86346).duration < 1"},	
 --actions.aoe+=/thunder_clap,target=2,if=dot.deep_wounds.attack_power*1.1<stat.attack_power

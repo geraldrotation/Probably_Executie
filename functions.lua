@@ -163,7 +163,7 @@ ProbablyEngine.command.register('cutie', function(msg, box)
   if command == "tarminus" then
     if macros["SingleTarget"] == 3 then
       macros["SingleTarget"] = 2
-      ecn:message("Two Targets") 
+      ecn:message("Two Targets")
     elseif macros["SingleTarget"] == 2 then
       macros["SingleTarget"] = 1
       ecn:message("Single Target")
