@@ -22,7 +22,8 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 -----------------------------------------------------------------------------------------------------------------------------
 -- Buffs -------------------------------------------------------------------------------------------------------------------- 
 -----------------------------------------------------------------------------------------------------------------------------
-	{ "18499" }, -- Berserker Rage
+	{ "18499", "!player.buff(12880)" }, -- Berserker Rage
+	{ "18499", {"player.buff(12880).duration < 1", "player.spell(23881).cooldown > 1"} }, -- Berserker Rage
 	{ "20572" }, -- Blood Fury
 -----------------------------------------------------------------------------------------------------------------------------
 -- Interrupts / Disarm ------------------------------------------------------------------------------------------------------ 
@@ -33,8 +34,7 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 -----------------------------------------------------------------------------------------------------------------------------
 -- Defensive Cooldowns ------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
-  	{ "103840" }, -- Impending Victory
-  	{ "34428" }, -- Victory Rush
+  	--{ "34428" }, -- Victory Rush
   	{ "871", {"player.health < 25", "toggle.def"}}, -- Shield Wall
   	{ "118038", {"player.health < 35", "toggle.def"}}, -- Die by the Sword
   	{ "97462", {"player.health < 35", "toggle.def"}}, -- Rallying Cry
@@ -51,64 +51,88 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 -----------------------------------------------------------------------------------------------------------------------------
 -- Offensive Cooldowns ------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
-	{ "107574", "modifier.cooldowns"}, -- Avatar
-	{ "1719", "modifier.cooldowns"}, -- Recklessness
-	{ "114207", {"modifier.cooldowns", "toggle.autobanner"}}, -- Skull Banner
+	--{ "107574", "modifier.cooldowns"}, -- Avatar
+	--{ "1719", "modifier.cooldowns"}, -- Recklessness
+	--{ "114207", {"modifier.cooldowns", "toggle.autobanner"}}, -- Skull Banner
+	{{ 
+		{"1719", "player.spell(86346).cooldown < 2"}, -- Reck
+		{"1719", {"target.debuff(86346).duration >= 5"}},
+		{"1719", "target.health < 20"},
+		{"107574", "player.buff(1719)"}, -- Avatar
+		{"114207", {"!player.buff(114206)", "player.spell(86346).cooldown < 2", "toggle.autobanner"}}, -- Skull Banner
+		{"114207", {"!player.buff(114206)", "target.debuff(86346) >= 5", "toggle.autobanner"}},
+		{"114207", {"!player.buff(114206)", "player.buff(1719)", "toggle.autobanner"}},
+		{ "20572", "player.buff(1719)" }, -- Orc Racial
+		{ "26297", "player.buff(1719)" }, -- Troll Racial
+	}, "modifier.cooldowns"},
+	{ "#gloves" },
 -----------------------------------------------------------------------------------------------------------------------------
 -- Main Rotation ------------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
--- Multitarget -------------------------------------------------------------------------------------------------------------- 
+	{"12292", "player.buff(12880)"}, -- BBath
+--actions.single_target=heroic_strike,if=rage>115|(debuff.colossus_smash.up&rage>60&set_bonus.tier16_2pc_melee)
+	{"78", "player.rage > 115"},
+	{"78", {"target.debuff(86346)", "player.rage >= 60"}},
+--actions.single_target+=/mortal_strike,if=dot.deep_wounds.remains<1.0|buff.enrage.down|rage<10
+	{"12294", "target.debuff(115767).duration < 1"},
+	{"12294", "!player.buff(12880)"},
+	{"12294", "player.rage < 10"},
+--actions.single_target+=/colossus_smash,if=debuff.colossus_smash.remains<1.0
+	{"86346", "target.debuff(86346).duration < 1"},
+--actions.single_target+=/mortal_strike
+	{"12294"},
+--actions.single_target+=/storm_bolt,if=enabled&debuff.colossus_smash.up
+	{"107570", "target.debuff(86346)"},
+--actions.single_target+=/dragon_roar,if=enabled&debuff.colossus_smash.down
+	{"118000", "!target.debuff(86346)"},
+--actions.single_target+=/execute,if=buff.sudden_execute.down|buff.taste_for_blood.down|rage>90|target.time_to_die<12
+	{"5308", "!player.buff(139958)"},
+	{"5308", "!player.buff(56636)"},
+	{"5308", "player.rage > 90"},
+--actions.single_target+=/slam,if=target.health.pct>=20&(stat.crit>25000|buff.recklessness.up)
+	{"1464", {"target.health >= 20", "player.buff(1719)"}},
+--actions.single_target+=/overpower,if=target.health.pct>=20&rage<100|buff.sudden_execute.up
+	{"7384", {"target.health >= 20", "player.rage < 100"}},
+	{"7384", "player.buff(139958)"},
+--actions.single_target+=/slam,if=target.health.pct>=20
+	{"1464", "target.health >= 20"},
+--actions.single_target+=/battle_shout
+	{ "6673"},
+--actions.single_target+=/heroic_throw
+	{"57755"},
+-----------------------------------------------------------------------------------------------------------------------------
+-- Multitarget Rotation -------------------------------------------------------------------------------------------------------- 
+-----------------------------------------------------------------------------------------------------------------------------
 	{{ 
-		{ "6343", "target.range <= 6" }, -- Thunder Clap
-		{ "12328" }, -- Sweeping Strikes
-		{ "12292", "target.range <= 6" }, -- Bloodbath
-		{ "46924", "player.buff(12292).duration > 5" }, -- Bladestorm
-		{ "118000",  }, -- Dragon Roar
-		{ "86346", "target.debuff(86346).duration <= 2" }, -- Colossus Smash
-		{ "12294", "player.rage < 40" }, -- Mortal Strike
-		{ "1464", "player.rage > 70" }, -- Slam
-		{ "7384", "player.buff(60503).count >= 1" }, -- Overpower
-		{ "6673" }, -- Battle Shout
-		{ "57755" }, -- Heroic Throw"
+--actions.aoe=sweeping_strikes
+	{"12328"},
+	{"12292", "player.buff(12880)"}, -- BBath
+--actions.aoe+=/cleave,if=rage>110&active_enemies<=4
+	{"845", {"player.rage > 110", "modifier.enemies <= 4"}},
+--actions.aoe+=/bladestorm,if=enabled&(buff.bloodbath.up|!talent.bloodbath.enabled)
+	{ "46924", { "player.buff(12880)", "!player.spell(46924).exists"} },
+	{ "46924", { "player.buff(12880)", "player.buff(12292)"} },
+--actions.aoe+=/dragon_roar,if=enabled&debuff.colossus_smash.down
+	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists"} },
+	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)"} },
+--actions.aoe+=/colossus_smash,if=debuff.colossus_smash.remains<1
+	{"86346", "target.debuff(86346).duration < 1"},	
+--actions.aoe+=/thunder_clap,target=2,if=dot.deep_wounds.attack_power*1.1<stat.attack_power
+	{"6343", "target.range <= 6"},
+--actions.aoe+=/mortal_strike,if=active_enemies=2|rage<50
+	{"12294", "modifier.enemies = 2"},
+	{"12294", "player.rage < 50"},
+--actions.aoe+=/execute,if=buff.sudden_execute.down&active_enemies=2
+	{"5308", {"!player.buff(139958)", "modifier.enemies = 2"}},
+--actions.aoe+=/slam,if=buff.sweeping_strikes.up&debuff.colossus_smash.up
+	{"1464", {"player.buff(12328)", "target.debuff(86346)"}},
+--actions.aoe+=/overpower,if=active_enemies=2
+	{"7384", "modifier.enemies = 2"},
+--actions.aoe+=/slam,if=buff.sweeping_strikes.up
+	{"1464", "player.buff(12328)"},
+--actions.aoe+=/battle_shout
+	{ "6673"},
 	}, "modifier.multitarget"},
--- Singletarget ------------------------------------------------------------------------------------------------------------- 
-	{ "86346", "target.debuff(86346).duration <= 2" }, -- Colossus Smash	
--- Inside CS ---------------------------------------------------------------------------------------------------------------- 
-	{{
-		{ "78", "player.rage >= 90" }, -- Heroic Strike
-		{ "107570" }, -- Storm Bolt
-		{ "12292", "target.range <= 6" }, -- Bloodbath
-		{ "12294" }, -- Mortal Strike
-		{ "5308" }, -- Execute
-		{ "1464", "player.rage >= 40" }, -- Slam
-		{ "7384", "player.buff(60503).count >= 3" }, -- Overpower
-	}, {"target.debuff(86346)", "target.health > 20" }},
--- Execute inside CS -------------------------------------------------------------------------------------------------------- 
-	{{
-		{ "107570" }, -- Storm Bold
-		{ "12292", "target.range <= 6" }, -- Bloodbath
-		{ "12294" }, -- Mortal Strike
-		{ "5308" }, -- Execute
-		{ "7384", "player.buff(60503).count >= 1" }, -- Overpower
-	}, {"target.debuff(86346)", "target.health <= 20" }},	
--- Outside CS ---------------------------------------------------------------------------------------------------------------
-	{{
-		{ "78", "player.rage >= 110" }, -- Heroic Strike
-		{ "12294" }, -- Mortal Strike
-		{ "5308" }, -- Execute	
-		{ "7384", "player.buff(60503).count >= 3" }, -- Overpower
-		{ "1464", "player.rage >= 80" }, -- Slam
-		{ "6673" }, -- Battle Shout
-		{ "57755" }, -- Heroic Throw
-	}, {"!target.debuff(86346)", "target.health > 20" }},
--- Execute outside CS -------------------------------------------------------------------------------------------------------
-	{{
-		{ "12294" }, -- Mortal Strike
-		{ "5308" }, -- Execute
-		{ "7384", "player.buff(60503).count >= 1" }, -- Overpower
-		{ "6673" }, -- Battle Shout
-		{ "57755" }, -- Heroic Throw
-	}, {"!target.debuff(86346)", "target.health <= 20" }},
 -----------------------------------------------------------------------------------------------------------------------------
 -- OOC Hotkeys -------------------------------------------------------------------------------------------------------------- 
 -----------------------------------------------------------------------------------------------------------------------------
@@ -128,5 +152,5 @@ ProbablyEngine.toggle.create(
     'autobanner',
     'Interface\\Icons\\warrior_skullbanner.png‎',
     'Auto Skull Banner',
-	'Enable or Disable Auto Skull Banner\nUse /cutie qSkullb if disabled')
+	'Enable or Disable Auto Skull Banner\nUse /arma qSkullb if disabled')
 end)
