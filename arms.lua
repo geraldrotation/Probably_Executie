@@ -28,9 +28,14 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 -----------------------------------------------------------------------------------------------------------------------------
 -- Interrupts / Disarm ------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
-	{ "6552", "modifier.interrupts" }, -- Pummel
-	{ "102060", "modifier.interrupts" }, -- Disrupting Shout
-	{ "676", "modifier.interrupts"}, -- Disarm
+	{{
+    { "102060", { -- Shout if Pummel on CD
+       "player.spell(6552).cooldown > 0",
+    }},
+    { "6552" }, -- Pummel
+  }, "target.interruptAt(50)" },
+
+	{ "676", "target.disarmable"}, -- Disarm
 -----------------------------------------------------------------------------------------------------------------------------
 -- Defensive Cooldowns ------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
@@ -84,7 +89,7 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 --actions.single_target+=/storm_bolt,if=enabled&debuff.colossus_smash.up
 	{"107570", "target.debuff(86346)"},
 --actions.single_target+=/dragon_roar,if=enabled&debuff.colossus_smash.down
-	{"118000", {"!target.debuff(86346)", "target.range <= 6"}},
+	{"118000", {"!target.debuff(86346)", "target.spell(78).range"}},
 --actions.single_target+=/execute,if=buff.sudden_execute.down|buff.taste_for_blood.down|rage>90|target.time_to_die<12
 	{"5308", "!player.buff(139958)"},
 	{"5308", "!player.buff(56636)"},
@@ -113,12 +118,12 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 	{ "46924", { "player.buff(12880)", "!player.spell(46924).exists"} },
 	{ "46924", { "player.buff(12880)", "player.buff(12292)"} },
 --actions.aoe+=/dragon_roar,if=enabled&debuff.colossus_smash.down
-	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.range <= 6"} },
-	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.range <= 6"} },
+	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.spell(78).range"} },
+	{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.spell(78).range"} },
 --actions.aoe+=/colossus_smash,if=debuff.colossus_smash.remains<1
 	{"86346", "target.debuff(86346).duration < 1"},	
 --actions.aoe+=/thunder_clap,target=2,if=dot.deep_wounds.attack_power*1.1<stat.attack_power
-	{"6343", "target.range <= 6"},
+	{"6343", "target.spell(78).range"},
 --actions.aoe+=/mortal_strike,if=active_enemies=2|rage<50
 	{"12294", "modifier.enemies = 2"},
 	{"12294", "player.rage < 50"},

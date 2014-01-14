@@ -28,9 +28,14 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 -----------------------------------------------------------------------------------------------------------------------------
 -- Interrupts / Disarm ------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
-	{ "6552", "modifier.interrupts" }, -- Pummel
-	{ "102060", {"player.spell(6552).cooldown","modifier.interrupts"} }, -- Disrupting Shout
-	{ "676", "modifier.interrupts"}, -- Disarm
+	{{
+    { "102060", { -- Shout if Pummel on CD
+       "player.spell(6552).cooldown > 0",
+    }},
+    { "6552" }, -- Pummel
+  }, "target.interruptAt(50)" },
+
+	{ "676", "target.disarmable"}, -- Disarm
 -----------------------------------------------------------------------------------------------------------------------------
 -- Defensive Cooldowns ------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
@@ -59,9 +64,9 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 		{"1719", {"target.debuff(86346).duration >= 5"}},
 		{"1719", "target.health < 20"},
 		{"107574", "player.buff(1719)"}, -- Avatar
-		{"114207", {"!player.buff(114206)", "player.spell(86346).cooldown < 2", "toggle.autobanner"}}, -- Skull Banner
-		{"114207", {"!player.buff(114206)", "target.debuff(86346) >= 5", "toggle.autobanner"}},
-		{"114207", {"!player.buff(114206)", "player.buff(1719)", "toggle.autobanner"}},
+		{"114207", {"!player.buff(114206)", "player.spell(86346).cooldown < 2", "target.spell(78).range", "toggle.autobanner"}}, -- Skull Banner
+		{"114207", {"!player.buff(114206)", "target.debuff(86346) >= 5", "target.spell(78).range", "toggle.autobanner"}},
+		{"114207", {"!player.buff(114206)", "player.buff(1719)", "target.spell(78).range", "toggle.autobanner"}},
 		{ "20572", "player.buff(1719)" }, -- Orc Racial
 		{ "26297", "player.buff(1719)" }, -- Troll Racial
 	}, "modifier.cooldowns"},
@@ -88,7 +93,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 	{"100130", {"player.buff(46916)", "target.health >= 20", "spell(233881).cooldown <= 1"}},
 --actions.single_target+=/wait,sec=cooldown.bloodthirst.remains,if=!(target.health.pct<20&debuff.colossus_smash.up&rage>=30&buff.enrage.up)&cooldown.bloodthirst.remains<=1&cooldown.bloodthirst.remains
 --actions.single_target+=/dragon_roar,if=enabled&(!debuff.colossus_smash.up&(buff.bloodbath.up|!talent.bloodbath.enabled))
-	{"118000", {"!target.debuff(86346)", "target.range <= 6"}},
+	{"118000", {"!target.debuff(86346)", "target.spell(78).range"}},
 --actions.single_target+=/colossus_smash
 	{"86346"},
 --actions.single_target+=/execute,if=debuff.colossus_smash.up|rage>70|target.time_to_die<12
@@ -126,8 +131,8 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 		{"845", {"player.rage >= 60", "target.debuff(86346)"}},
 		{"845", "player.rage > 90"},
 --actions.two_targets+=/dragon_roar,if=enabled&(!debuff.colossus_smash.up&(buff.bloodbath.up|!talent.bloodbath.enabled))
-		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.range <= 6"} },
-		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.range <= 6"} },
+		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.spell(78).range"} },
+		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.spell(78).range"} },
 		--{"118000",{"!target.debuff(86346)","player.spell(12292).exists", "player.buff(12292)"}},
 		--{"118000",{"!target.debuff(86346)","!player.spell(12292).exists"}},
 --actions.two_targets+=/bladestorm,if=enabled&buff.enrage.up&(buff.bloodbath.up|!talent.bloodbath.enabled)
@@ -146,7 +151,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 		{"85288", "player.buff(85739)"},
 		{"85288", "target.health < 20"},
 --actions.two_targets+=/whirlwind,if=!buff.meat_cleaver.up
-		{"1680", {"!player.buff(85739)", "target.range <= 6"}},
+		{"1680", {"!player.buff(85739)", "target.spell(78).range"}},
 --actions.two_targets+=/battle_shout,if=rage<70
 		{ "6673", "player.rage < 70" },
 --actions.two_targets+=/heroic_throw
@@ -162,8 +167,8 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 		{"845", {"player.rage >= 60", "target.debuff(86346)"}},
 		{"845", "player.rage > 90"},
 --actions.three_targets+=/dragon_roar,if=enabled&(!debuff.colossus_smash.up&(buff.bloodbath.up|!talent.bloodbath.enabled))
-		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.range <= 6"} },
-		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.range <= 6"} },
+		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.spell(78).range"} },
+		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.spell(78).range"} },
 		--{"118000",{"!target.debuff(86346)","player.spell(12292).exists", "player.buff(12292)"}},
 		--{"118000",{"!target.debuff(86346)","!player.spell(12292).exists"}},
 --actions.three_targets+=/bladestorm,if=enabled&buff.enrage.up&(buff.bloodbath.up|!talent.bloodbath.enabled)
@@ -180,7 +185,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.three_targets+=/bloodthirst,cycle_targets=1,if=!dot.deep_wounds.ticking
 		{ "23881"},
 --actions.three_targets+=/whirlwind
-		{"1680", "target.range <= 6"},
+		{"1680", "target.spell(78).range"},
 --actions.three_targets+=/raging_blow
 		{"85288"},
 --actions.three_targets+=/battle_shout,if=rage<70
@@ -197,8 +202,8 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.aoe+=/cleave,if=rage>110
 		{"845", "player.rage > 110"},
 --actions.aoe+=/dragon_roar,if=enabled&debuff.colossus_smash.down&(buff.bloodbath.up|!talent.bloodbath.enabled)
-		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.range <= 6"} },
-		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.range <= 6"} },
+		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "!player.spell(46924).exists", "target.spell(78).range"} },
+		{ "118000", {"!target.debuff(86346)", "player.buff(12880)", "player.buff(12292)", "target.spell(78).range"} },
 		--{"118000",{"!target.debuff(86346)","player.spell(12292).exists", "player.buff(12292)"}},
 		--{"118000",{"!target.debuff(86346)","!player.spell(12292).exists"}},
 --actions.aoe+=/bladestorm,if=enabled&buff.enrage.up&(buff.bloodbath.up|!talent.bloodbath.enabled)
@@ -213,7 +218,7 @@ ProbablyEngine.rotation.register_custom(72, "|cFFC79C6EExecutie Fury|r", {
 --actions.aoe+=/raging_blow,if=buff.meat_cleaver.stack=3
 		{"85288", "player.buff(85739).count = 3"},
 --actions.aoe+=/whirlwind
-		{"1680", "target.range <= 6"},
+		{"1680", "target.spell(78).range"},
 --actions.aoe+=/bloodthirst,cycle_targets=1,if=!dot.deep_wounds.ticking
 		{ "23881"},
 --actions.aoe+=/colossus_smash
