@@ -292,7 +292,7 @@ end
 -- Create Help Message ------------------------------------------------------------------------------------------------------------ 
 -----------------------------------------------------------------------------------------------------------------------------
 function cutie.macroHelp( ... )
-  print("|cFFC79C6EExecutie |rv1.1")
+  print("|cFFC79C6EExecutie |rv1.2")
   print("|cFFC79C6ECommands:|r\n/cutie macros - Create all Toggle / Spellqueue Macros")
   print("|cFFC79C6EToggle Macros:|r\n/cutie toggle - Rotation on/off\n/cutie kick - Interrupt & Disarm on/off\n/cutie cds - Offensive Cooldowns on/off\n/cutie aoe - Multitarget-Rotation on/off (4+ for Fury)\n/cutie autobanner - Auto Skull Banner on/off\n/cutie def - Auto Defensive Cooldowns on/off\n/cutie tarplus - Increase Targets(Fury only)\n/cutie tarminus - Decrease Targets (Fury only)")
   print("|cFFC79C6EQueue Macros:|r\n/cutie qSkullb | qShieldWall | qDiebtSw | qDemob | qTfour | qTfive | qRally")
