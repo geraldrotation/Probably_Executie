@@ -8,3 +8,4 @@
 functions.lua
 arms.lua
 fury.lua
+conditions_cutie.lua

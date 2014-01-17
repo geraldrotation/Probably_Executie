@@ -92,15 +92,18 @@ ProbablyEngine.rotation.register_custom(71, "|cFFC79C6EExecutie Arms|r", {
 	{"118000", {"!target.debuff(86346)", "target.spell(78).range"}},
 --actions.single_target+=/execute,if=buff.sudden_execute.down|buff.taste_for_blood.down|rage>90|target.time_to_die<12
 	{"5308", "!player.buff(139958)"},
-	{"5308", "!player.buff(56636)"},
+	{"5308", "!player.buff(60503)"},
 	{"5308", "player.rage > 90"},
 --actions.single_target+=/slam,if=target.health.pct>=20&(stat.crit>25000|buff.recklessness.up)
+	{"1464", {"target.health >= 20", "player.mcrit > 25000"}},
 	{"1464", {"target.health >= 20", "player.buff(1719)"}},
 --actions.single_target+=/overpower,if=target.health.pct>=20&rage<100|buff.sudden_execute.up
-	{"7384", {"target.health >= 20", "player.rage < 100"}},
-	{"7384", "player.buff(139958)"},
+	{"7384", {"target.health >= 20", "player.rage < 100", "player.mcrit < 25000"}},
+	{"7384", {"player.buff(139958)", "player.mcrit < 25000"}},
+	--{"7384", {"player.buff(60503).count >= 3", "player.mcrit < 25000"}},
 --actions.single_target+=/slam,if=target.health.pct>=20
-	{"1464", "target.health >= 20"},
+	{"1464", {"target.health >= 20", "player.rage >= 40", "target.debuff(86346)"}},
+	{"1464", {"target.health >= 20", "player.rage >= 80", "!target.debuff(86346)"}},
 --actions.single_target+=/battle_shout
 	{ "6673"},
 --actions.single_target+=/heroic_throw
